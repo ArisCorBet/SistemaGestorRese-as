@@ -232,6 +232,7 @@ public class LinkedList<E> {
         }
     }
 
+    
 
 }
 //UUid: identificador unico universal,genera una llave primaria
