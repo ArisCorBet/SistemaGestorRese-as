@@ -1,5 +1,5 @@
 package com.unl.proyectogrupal.base.models;
 
-public class EnumTipoCuenta {
-    
+public enum EnumTipoCuenta {
+    ADMINISTRADOR, USUARIO
 }
