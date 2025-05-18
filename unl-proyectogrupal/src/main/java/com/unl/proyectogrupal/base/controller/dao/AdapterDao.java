@@ -1,13 +1,11 @@
 package com.unl.proyectogrupal.base.controller.dao;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Scanner;
 
-import com.unl.proyectogrupal.base.controller.data_struct.list.LinkedList;
-
 import com.google.gson.Gson;
+import com.unl.proyectogrupal.base.controller.data_struct.list.LinkedList;
 
 public class AdapterDao <T> implements InterfaceDao<T> {
     private Class<T> clazz;

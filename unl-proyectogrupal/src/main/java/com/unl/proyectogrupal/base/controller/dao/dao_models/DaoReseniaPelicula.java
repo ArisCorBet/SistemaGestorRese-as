@@ -43,4 +43,6 @@ public class DaoReseniaPelicula extends AdapterDao<ReseniaPelicula>{
             return false;
         }
     }
+
+ 
 }
