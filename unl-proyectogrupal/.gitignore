@@ -3,7 +3,6 @@
 .vscode/
 .settings
 .project
-.classpath
 
 *.iml
 .DS_Store
