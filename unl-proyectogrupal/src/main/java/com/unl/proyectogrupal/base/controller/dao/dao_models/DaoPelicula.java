@@ -32,6 +32,7 @@ public class DaoPelicula extends AdapterDao<Pelicula> {
             return false;
         }
     }
+	//borrado
     public Boolean update(Integer pos) {
         try {
             this.update(obj, pos);
@@ -40,7 +41,6 @@ public class DaoPelicula extends AdapterDao<Pelicula> {
             return false;
         }
     }
-
     public static void main(String[] args) {
         DaoPelicula da = new DaoPelicula();
         da.getObj().setId(da.listAll().getLength() + 1);
