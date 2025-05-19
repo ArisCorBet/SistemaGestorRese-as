@@ -55,10 +55,7 @@ public class DaoPersona extends AdapterDao<Persona> {
         da.getObj().setId(da.listAll().getLength()+1);
         da.getObj().setNombre("Luis Miguel");
         da.getObj().setApellido("Sanches Torres");
-        Calendar cal = Calendar.getInstance();
-        cal.set(2000, Calendar.MAY, 15); 
-        Date fechaNacimiento = cal.getTime();
-        da.getObj().setFechaNacimiento(fechaNacimiento);
+        da.getObj().setFechaNacimiento("15/05/2000");
         if (da.save()) {
             System.out.println("Guardado");
         } else {

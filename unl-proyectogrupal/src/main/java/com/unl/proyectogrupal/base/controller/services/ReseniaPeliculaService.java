@@ -74,7 +74,6 @@ public class ReseniaPeliculaService {
             }
         }
         return lista;
-    
     }
 
     
