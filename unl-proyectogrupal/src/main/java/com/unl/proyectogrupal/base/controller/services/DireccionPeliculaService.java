@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoDireccionPelicula;
 import com.unl.proyectogrupal.base.models.DireccionPelicula;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.Endpoint;
 import com.vaadin.hilla.mappedtypes.Pageable;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 @Endpoint
 @AnonymousAllowed
