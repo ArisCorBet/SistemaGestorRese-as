@@ -2,7 +2,7 @@ package com.unl.proyectogrupal.base.models;
 
 public class GeneroPelicula {
     private Integer idGenero;
-    private String idPelicula;
+    private Integer idPelicula;
 
     public Integer getIdGenero() {
         return this.idGenero;
@@ -12,13 +12,12 @@ public class GeneroPelicula {
         this.idGenero = idGenero;
     }
 
-    public String getIdPelicula() {
+    public Integer getIdPelicula() {
         return this.idPelicula;
     }
 
-    public void setIdPelicula(String idPelicula) {
+    public void setIdPelicula(Integer idPelicula) {
         this.idPelicula = idPelicula;
     }
 
 }
-
