@@ -9,8 +9,6 @@ import com.unl.proyectogrupal.base.models.GeneroPelicula;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 
-import jakarta.validation.constraints.NotEmpty;
-
 @BrowserCallable
 @AnonymousAllowed
 
@@ -21,16 +19,16 @@ public class GeneroPeliculaService {
         this.dp = new DaoGeneroPelicula();
     }
 
-    public void createGeneroPelicula(@NotEmpty Integer idPelicula) throws Exception {
-        if (idPelicula.trim().length() > 0 ) {
+    public void createGeneroPelicula(Integer idPelicula) throws Exception {
+        if (idPelicula > 0) {
             dp.getObj().setIdPelicula(null);
 
             if (!dp.save())
                 throw new Exception("No se pudo guardar los datos de la Genero");
         }
     }
-    public void updateGeneroPelicula(Integer idGenero,@NotEmpty String Nombre ) throws Exception {
-        if (Nombre.trim().length() > 0 ) {
+    public void updateGeneroPelicula(Integer idGenero,Integer idPelicula ) throws Exception {
+        if (idGenero > 0 && idPelicula > 0) {
             dp.getObj().setIdGenero(idGenero);
             dp.getObj().setIdPelicula(idPelicula); 
             if (!dp.update(idGenero -1))
@@ -62,7 +60,7 @@ public class GeneroPeliculaService {
             for(int i = 0; i < arreglo.length; i++) {
                 HashMap<String, String> aux = new HashMap<>();
                 aux.put("idGenero", String.valueOf(arreglo[i].getIdGenero().toString()));
-                aux.put("idPelicula", String.valueOf(arreglo[i].getIdPelicula()));
+                aux.put("idPelicula", String.valueOf(arreglo[i].getIdPelicula().toString()));
                 lista.add(aux);
             }
         }
@@ -72,4 +70,3 @@ public class GeneroPeliculaService {
 
     
 }
-
