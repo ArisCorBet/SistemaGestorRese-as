@@ -1,6 +1,7 @@
 package com.unl.proyectogrupal.base.controller.dao.dao_models;
 
 import com.unl.proyectogrupal.base.models.GeneroPelicula;
+
 import com.unl.proyectogrupal.base.controller.dao.AdapterDao;
 
 public class DaoGeneroPelicula extends AdapterDao<GeneroPelicula> {
@@ -47,7 +48,7 @@ public class DaoGeneroPelicula extends AdapterDao<GeneroPelicula> {
     public static void main(String[] args) {
         DaoGeneroPelicula da = new DaoGeneroPelicula();
         da.getObj().setIdGenero(da.listAll().getLength() + 1);
-        da.getObj().setIdPelicula("P001");
+        da.getObj().setIdPelicula(1);
         if (da.save())
             System.out.println("GUARDADO");
         else
