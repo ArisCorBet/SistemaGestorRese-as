@@ -6,7 +6,7 @@ public class Persona {
     private Integer id;
     private String nombre;
     private String apellido;
-    private String fechaNacimiento;
+    private Date fechaNacimiento;
     private String telefono;
 
     public Integer getId() {
@@ -33,11 +33,11 @@ public class Persona {
         this.apellido = apellido;
     }
 
-    public String getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return this.fechaNacimiento;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
+    public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

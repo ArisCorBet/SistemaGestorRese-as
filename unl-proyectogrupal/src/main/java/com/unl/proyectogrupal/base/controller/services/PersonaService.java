@@ -22,7 +22,7 @@ public class PersonaService {
     this.dp = new DaoPersona();
     }
 
-    public void create(@NotEmpty String nombre,@NotEmpty String apellido,  @NotEmpty String fechaNacimiento, @NotEmpty String telefono) throws Exception{
+    public void create(@NotEmpty String nombre,@NotEmpty String apellido,   @NotEmpty Date fechaNacimiento, @NotEmpty String telefono) throws Exception{
         if (nombre.trim().length() > 0 && apellido.trim().length() > 0 && fechaNacimiento.toString().length() > 0 && telefono.trim().length() > 0){
             dp.getObj().setNombre(nombre);
             dp.getObj().setApellido(apellido);
@@ -33,7 +33,7 @@ public class PersonaService {
             } 
     }
 
-    public void update(Integer id,@NotEmpty String nombre,@NotEmpty String apellido, @ NotEmpty String fechaNacimiento , @NotEmpty String telefono ) throws Exception {
+    public void update(Integer id,@NotEmpty String nombre,@NotEmpty String apellido, @ NotEmpty Date fechaNacimiento , @NotEmpty String telefono ) throws Exception {
         if (nombre.trim().length() > 0 && apellido.trim().length() > 0 && fechaNacimiento.toString().length() > 0 && telefono.trim().length() > 0 ) {
             dp.setObj(dp.listAll().get(id - 1));        
             dp.getObj().setNombre(nombre);
