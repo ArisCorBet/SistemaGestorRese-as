@@ -12,8 +12,8 @@ public class DaoDirector extends AdapterDao<Director> {
 
     public Director getObj() {
         if (obj == null)
-            obj = new Director();
-        return obj;
+            this.obj = new Director();
+        return this.obj;
     }
 
     public void setObj(Director obj) {
@@ -42,8 +42,8 @@ public class DaoDirector extends AdapterDao<Director> {
     public static void main(String[] args) {
         DaoDirector dao = new DaoDirector();
 
-        dao.getObj().setDescripcion("Director de cine independiente");
-        dao.getObj().setAniosCarrera(20);
+        dao.getObj().setDescripcionDirector("Director de cine independiente");
+        dao.getObj().setAniosCarrera(2005);
 
         if (dao.save()) {
             System.out.println("Director guardado exitosamente.");
@@ -52,8 +52,8 @@ public class DaoDirector extends AdapterDao<Director> {
         }
 
         dao.setObj(null);
-        dao.getObj().setDescripcion("Director de documentales");
-        dao.getObj().setAniosCarrera(12);
+        dao.getObj().setDescripcionDirector("Director de acción");
+        dao.getObj().setAniosCarrera(2012);
 
         if (dao.save()) {
             System.out.println("Director guardado exitosamente.");
@@ -61,5 +61,4 @@ public class DaoDirector extends AdapterDao<Director> {
             System.out.println("Error al guardar director.");
         }
     }
-
 }

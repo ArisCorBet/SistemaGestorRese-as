@@ -3,7 +3,7 @@ package com.unl.proyectogrupal.base.models;
 public class Actor {
 
     private int idActor;
-    private String descripcion;
+    private String descripcionActor;
     private int anioCarrera;
 
     public int getIdActor() {
@@ -14,12 +14,12 @@ public class Actor {
         this.idActor = idActor;
     }
 
-    public String getDescripcion() {
-        return this.descripcion;
+    public String getDescripcionActor() {
+        return this.descripcionActor;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescripcionActor(String descripcionActor) {
+        this.descripcionActor = descripcionActor;
     }
 
     public int getAnioCarrera() {

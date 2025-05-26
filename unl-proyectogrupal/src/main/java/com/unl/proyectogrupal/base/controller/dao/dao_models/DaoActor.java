@@ -12,8 +12,8 @@ public class DaoActor extends AdapterDao<Actor> {
 
     public Actor getObj() {
         if (obj == null)
-            obj = new Actor();
-        return obj;
+            this.obj = new Actor();
+        return this.obj;
     }
 
     public void setObj(Actor obj) {
@@ -42,24 +42,23 @@ public class DaoActor extends AdapterDao<Actor> {
     public static void main(String[] args) {
         DaoActor dao = new DaoActor();
 
-        dao.getObj().setDescripcion("Actor dramático");
+        // Primer actor
+        dao.getObj().setDescripcionActor("Actor dramático");
         dao.getObj().setAnioCarrera(2010);
 
-        if (dao.save()) {
-            System.out.println("Actor guardado exitosamente.");
-        } else {
-            System.out.println("Error al guardar actor.");
-        }
+        if (dao.save())
+            System.out.println("GUARDADO");
+        else
+            System.out.println("Hubo un error");
 
+        // Segundo actor
         dao.setObj(null);
-        dao.getObj().setDescripcion("Actor de comedia");
+        dao.getObj().setDescripcionActor("Actor de comedia");
         dao.getObj().setAnioCarrera(2015);
 
-        if (dao.save()) {
-            System.out.println("Actor guardado exitosamente.");
-        } else {
-            System.out.println("Error al guardar actor.");
-        }
+        if (dao.save())
+            System.out.println("GUARDADO");
+        else
+            System.out.println("Hubo un error");
     }
-
 }
