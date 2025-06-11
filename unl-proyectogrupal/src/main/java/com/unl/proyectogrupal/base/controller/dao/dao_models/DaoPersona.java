@@ -26,12 +26,11 @@ public class DaoPersona extends AdapterDao<Persona> {
 
     public Boolean save() {
         try {
-            obj.setId(listAll().getLength()+1);
+            obj.setId_persona(listAll().getLength()+1);
             this.persist(obj);
             return true;
         } catch (Exception e) {
             //LOG DE ERROR
-            e.printStackTrace();
             System.out.println(e);
             return false;
             // TODO: handle exception
@@ -50,16 +49,5 @@ public class DaoPersona extends AdapterDao<Persona> {
     }
 
 
-    public static void main(String[] args) {
-        DaoPersona da = new DaoPersona();
-        da.getObj().setId(da.listAll().getLength()+1);
-        da.getObj().setNombre("Luis Miguel");
-        da.getObj().setApellido("Sanches Torres");
-        da.getObj().setFechaNacimiento("15/05/2000");
-        if (da.save()) {
-            System.out.println("Guardado");
-        } else {
-            System.out.println("Error al guardar");
-        }
-    }
+   
 }
