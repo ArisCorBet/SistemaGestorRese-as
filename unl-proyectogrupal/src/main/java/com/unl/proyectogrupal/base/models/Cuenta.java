@@ -1,55 +1,69 @@
 package com.unl.proyectogrupal.base.models;
 
+import com.unl.proyectogrupal.base.models.enums.Estado_cuenta;
+import com.unl.proyectogrupal.base.models.enums.Tipo_cuenta;
+
 public class Cuenta {
     private Integer id;
     private String correo;
-    private String clave;
-    private Boolean estado;
-    private EnumTipoCuenta tipoCuenta;
+    private String contrasenia;
+    private Estado_cuenta estado_cuenta;
+    private Tipo_cuenta tipo_cuenta;
+    private Integer id_persona;
 
 
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer id_cuenta) {
+        this.id = id_cuenta;
     }
 
     public String getCorreo() {
-        return this.correo;
+        return correo;
     }
 
     public void setCorreo(String correo) {
         this.correo = correo;
     }
 
-    public String getClave() {
-        return this.clave;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setClave(String clave) {
-        this.clave = clave;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
-    public Boolean isEstado() {
-        return this.estado;
+    public Estado_cuenta getEstado_cuenta() {
+        return estado_cuenta;
     }
 
-    public Boolean getEstado() {
-        return this.estado;
+    public void setEstado_cuenta(Estado_cuenta estado_cuenta) {
+        this.estado_cuenta = estado_cuenta;
+    }
+    public Tipo_cuenta getTipo_cuenta() {
+        return tipo_cuenta;
     }
 
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
+    public void setTipo_cuenta(Tipo_cuenta tipo_cuenta) {
+        this.tipo_cuenta = tipo_cuenta;
     }
 
-    public EnumTipoCuenta getTipoCuenta() {
-        return this.tipoCuenta;
+
+    public Integer getId_persona() {
+        return id_persona;
     }
 
-    public void setTipoCuenta(EnumTipoCuenta tipoCuenta) {
-        this.tipoCuenta = tipoCuenta;
+    public void setId_persona(Integer id_persona) {
+        this.id_persona = id_persona;
     }
-    
+
+    @Override
+    public String toString() {
+        return "id_cuenta=" + id + ", correo=" + correo + ", contrasenia=" + contrasenia
+                + ", tipo_cuenta=" + tipo_cuenta;
+    }
+
 }
