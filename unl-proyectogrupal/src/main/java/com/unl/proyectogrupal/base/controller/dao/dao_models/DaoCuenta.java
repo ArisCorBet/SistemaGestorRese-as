@@ -138,7 +138,7 @@ public class DaoCuenta extends AdapterDao<Cuenta> {
      * return lista;
      * }
      */
-
+/// ////////////VERIFICACION DE USUARIO ////////////////////////////
     public HashMap<String, Object> login(String email, String password) throws Exception {
         if (!listAll().isEmpty()) {
             HashMap<String, Object>[] arreglo = listPrivate().toArray();
