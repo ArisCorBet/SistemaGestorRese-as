@@ -1,7 +1,6 @@
 package com.unl.proyectogrupal.base.models;
 
 import java.util.Date;
-
 import com.unl.proyectogrupal.base.models.enums.Genero;
 
 public class Persona {

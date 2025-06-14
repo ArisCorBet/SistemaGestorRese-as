@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoGeneroPelicula;
+import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoGenero;
+import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoPelicula;
 import com.unl.proyectogrupal.base.models.GeneroPelicula;
+import com.unl.proyectogrupal.base.models.Genero;
+import com.unl.proyectogrupal.base.models.Pelicula;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 
@@ -19,38 +23,62 @@ public class GeneroPeliculaService {
         this.dp = new DaoGeneroPelicula();
     }
 
-    public void createGeneroPelicula(Integer idPelicula) throws Exception {
-        if (idPelicula > 0) {
-            dp.getObj().setIdPelicula(null);
+    public void createGeneroPelicula( Integer idPelicula,  Integer idGenero) throws Exception {
+        if (idPelicula > 0 && idGenero >0) {
+            dp.getObj().setIdPelicula(idPelicula);
+            dp.getObj().setIdGenero(idGenero);
+
 
             if (!dp.save())
                 throw new Exception("No se pudo guardar los datos de la Genero");
         }
     }
-    public void updateGeneroPelicula(Integer idGenero,Integer idPelicula ) throws Exception {
-        if (idGenero > 0 && idPelicula > 0) {
+    public void updateGeneroPelicula(Integer idGeneroPelicula, Integer idGenero,Integer idPelicula ) throws Exception {
+        if (idGeneroPelicula !=null && idGeneroPelicula > 0 && idGenero > 0 && idPelicula > 0) {
+            dp.setObj(dp.listAll().get(idGeneroPelicula-1));
             dp.getObj().setIdGenero(idGenero);
             dp.getObj().setIdPelicula(idPelicula); 
-            if (!dp.update(idGenero -1))
+            if (!dp.update(idGeneroPelicula -1))
                 throw new Exception("No se pudo guardar los datos de la Genero");
         }
     }
 
-    
-    /*public List<HashMap> listaAlbumGenero() {
+
+
+
+
+    public List<HashMap> listaGeneroCombo(){
         List<HashMap> lista = new ArrayList<>();
-        DaoGenero da = new DaoGenero();
-        if(!da.listAll().isEmpty()) {
-            Genero [] arreglo = da.listAll().toArray();
-            for(int i = 0; i < arreglo.length; i++) {
+        DaoGenero dg = new DaoGenero();
+        if(!dg.listAll().isEmpty()) {
+            Genero [] arreglo = dg.listAll().toArray();
+            for(int i = 0; i < arreglo.length; i++){
                 HashMap<String, String> aux = new HashMap<>();
-                aux.put("value", arreglo[i].getId().toString(i)); 
-                aux.put("label", arreglo[i].getNombre()); 
-                lista.add(aux);  
+                aux.put("value", arreglo[i].getIdGenero().toString()); 
+                aux.put("label", arreglo[i].getNombre());  
+                lista.add(aux);    
             }
         }
         return lista;
-    }*/
+    }
+
+
+
+    public List<HashMap> listaPeliculaCombo(){
+        List<HashMap> lista = new ArrayList<>();
+        DaoPelicula dp = new DaoPelicula();
+        if(!dp.listAll().isEmpty()) {
+            Pelicula [] arreglo = dp.listAll().toArray();
+            for(int i = 0; i < arreglo.length; i++){
+                HashMap<String, String> aux = new HashMap<>();
+                aux.put("value", arreglo[i].getId().toString()); 
+                aux.put("label", arreglo[i].getTitulo());  
+                lista.add(aux);    
+            }
+        }
+        return lista;
+    }
+
 
     public List<HashMap> listGeneroPelicula(){
         List<HashMap> lista = new ArrayList<>();
@@ -59,6 +87,7 @@ public class GeneroPeliculaService {
       
             for(int i = 0; i < arreglo.length; i++) {
                 HashMap<String, String> aux = new HashMap<>();
+                aux.put("idPeliculaGenero", String.valueOf(arreglo[i].getIdGeneroPelicula().toString()));
                 aux.put("idGenero", String.valueOf(arreglo[i].getIdGenero().toString()));
                 aux.put("idPelicula", String.valueOf(arreglo[i].getIdPelicula().toString()));
                 lista.add(aux);

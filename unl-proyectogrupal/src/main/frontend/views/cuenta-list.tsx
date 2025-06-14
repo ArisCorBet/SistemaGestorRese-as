@@ -7,7 +7,7 @@ import handleError from 'Frontend/views/_ErrorHandler';
 import { Group, ViewToolbar } from 'Frontend/components/ViewToolbar';
 
 import { useDataProvider } from '@vaadin/hilla-react-crud';
-import Artista from 'Frontend/generated/com/unl/music/base/models/Persona';
+import Artista from 'Frontend/generated/com/unl/proyectogrupal/base/models/Persona';
 import { useCallback, useEffect, useState } from 'react';
 
 export const config: ViewConfig = {

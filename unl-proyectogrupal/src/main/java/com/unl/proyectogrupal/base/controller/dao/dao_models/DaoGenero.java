@@ -45,10 +45,10 @@ public class DaoGenero extends AdapterDao<Genero> {
     }
 
     public static void main(String[] args) {
-        DaoGenero da = new DaoGenero();
-        da.getObj().setIdGenero(da.listAll().getLength() + 1);
-        da.getObj().setNombre("Comedia");
-        if (da.save())
+        DaoGenero dg = new DaoGenero();
+        dg.getObj().setIdGenero(dg.listAll().getLength() + 1);
+        dg.getObj().setNombre("Comedia");
+        if (dg.save())
             System.out.println("GUARDADO");
         else
             System.out.println("Hubo un error");
