@@ -15,25 +15,25 @@ import jakarta.validation.constraints.NotEmpty;
 @AnonymousAllowed
 
 public class GeneroService {
-    private DaoGenero dp;
+    private DaoGenero dg;
 
     public GeneroService() {
-        this.dp = new DaoGenero();
+        this.dg = new DaoGenero();
     }
 
     public void createGenero(@NotEmpty String Nombre) throws Exception {
         if (Nombre.trim().length() > 0 ) {
-            dp.getObj().setNombre(Nombre);
+            dg.getObj().setNombre(Nombre);
 
-            if (!dp.save())
+            if (!dg.save())
                 throw new Exception("No se pudo guardar los datos de la Genero");
         }
     }
     public void updateGenero(Integer idGenero,@NotEmpty String Nombre ) throws Exception {
         if (Nombre.trim().length() > 0 ) {
-            dp.getObj().setIdGenero(idGenero);
-            dp.getObj().setNombre(Nombre);   
-            if (!dp.update(idGenero -1))
+            dg.getObj().setIdGenero(idGenero);
+            dg.getObj().setNombre(Nombre);   
+            if (!dg.update(idGenero -1))
                 throw new Exception("No se pudo guardar los datos de la Genero");
         }
     }
@@ -56,8 +56,8 @@ public class GeneroService {
 
     public List<HashMap> listGenero(){
         List<HashMap> lista = new ArrayList<>();
-        if(!dp.listAll().isEmpty()) {
-            Genero [] arreglo = dp.listAll().toArray();
+        if(!dg.listAll().isEmpty()) {
+            Genero [] arreglo = dg.listAll().toArray();
       
             for(int i = 0; i < arreglo.length; i++) {
                 HashMap<String, String> aux = new HashMap<>();

@@ -76,12 +76,12 @@ public class PeliculaService {
 
     public List<HashMap> listaGeneroCombo(){
         List<HashMap> lista = new ArrayList<>();
-        DaoGenero Dg = new DaoGenero();
-        if(!Dg.listAll().isEmpty()) {
-            Genero [] arreglo = Dg.listAll().toArray();
+        DaoGenero dg = new DaoGenero();
+        if(!dg.listAll().isEmpty()) {
+            Genero [] arreglo = dg.listAll().toArray();
             for(int i = 0; i < arreglo.length; i++){
                 HashMap<String, String> aux = new HashMap<>();
-                aux.put("value", arreglo[i].getIdGenero().toString(i)); 
+                aux.put("value", arreglo[i].getIdGenero().toString()); 
                 aux.put("label", arreglo[i].getNombre());  
                 lista.add(aux);    
             }

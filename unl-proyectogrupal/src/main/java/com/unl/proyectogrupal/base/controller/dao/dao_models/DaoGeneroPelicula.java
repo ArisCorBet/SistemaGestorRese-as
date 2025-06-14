@@ -15,7 +15,7 @@ public class DaoGeneroPelicula extends AdapterDao<GeneroPelicula> {
     public GeneroPelicula getObj() {
         if (obj == null)
             this.obj = new GeneroPelicula();
-        return this.obj;
+        return obj;
     }
 
     public void setObj(GeneroPelicula obj) {
@@ -24,13 +24,12 @@ public class DaoGeneroPelicula extends AdapterDao<GeneroPelicula> {
 
     public Boolean save() {
         try {
-            obj.setIdGenero(listAll().getLength()+1);
+            obj.setIdGeneroPelicula(listAll().getLength() + 1);
             this.persist(obj);
             return true;
         } catch (Exception e) {
-            //TODO
+            
             return false;
-            // TODO: handle exception
         }
     }
 
@@ -39,20 +38,13 @@ public class DaoGeneroPelicula extends AdapterDao<GeneroPelicula> {
             this.update(obj, pos);
             return true;
         } catch (Exception e) {
+            
             //TODO
             return false;
             // TODO: handle exception
         }
     }
 
-    public static void main(String[] args) {
-        DaoGeneroPelicula da = new DaoGeneroPelicula();
-        da.getObj().setIdGenero(da.listAll().getLength() + 1);
-        da.getObj().setIdPelicula(1);
-        if (da.save())
-            System.out.println("GUARDADO");
-        else
-            System.out.println("Hubo un error");
-    }
-
+    
+    
 }

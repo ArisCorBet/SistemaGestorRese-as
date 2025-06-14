@@ -67,5 +67,10 @@ public class Pelicula {
     public void setIdGenero(Integer idGenero) {
         this.idGenero = idGenero;
     }
+
+    public Object getIdPelicula() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getIdPelicula'");
+    }
     
 }
