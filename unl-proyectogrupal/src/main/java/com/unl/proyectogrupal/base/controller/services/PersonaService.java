@@ -1,8 +1,6 @@
 package com.unl.proyectogrupal.base.controller.services;
-
-
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,9 +8,10 @@ import com.unl.proyectogrupal.base.models.Cuenta;
 import com.unl.proyectogrupal.base.models.Persona;
 import com.unl.proyectogrupal.base.models.enums.Estado_cuenta;
 import com.unl.proyectogrupal.base.models.enums.Genero;
-import com.unl.proyectogrupal.base.models.enums.Tipo_Cuenta;
+import com.unl.proyectogrupal.base.models.enums.Tipo_cuenta;
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoPersona;
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoCuenta;
+
 
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
@@ -20,7 +19,6 @@ import com.vaadin.hilla.BrowserCallable;
 import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-
 
 @BrowserCallable
 @AnonymousAllowed
