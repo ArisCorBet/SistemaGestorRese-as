@@ -211,16 +211,6 @@ function EditarGeneroEntryFormUpdate(props: editarGeneroEntryFormUpdateProps) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 //LISTA DE Genero
 export default function GeneroView() {
   

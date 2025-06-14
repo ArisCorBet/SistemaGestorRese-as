@@ -1,3 +1,4 @@
+
 package com.unl.proyectogrupal.base.controller.dao.dao_models;
 
 import com.unl.proyectogrupal.base.controller.dao.AdapterDao;
@@ -11,6 +12,7 @@ public class DaoPersona extends AdapterDao<Persona> {
         // TODO Auto-generated constructor stub
     }
 
+    
     public Persona getObj() {
         if (obj == null)
             this.obj = new Persona();
