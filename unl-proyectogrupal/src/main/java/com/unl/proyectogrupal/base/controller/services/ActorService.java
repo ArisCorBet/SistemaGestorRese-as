@@ -22,14 +22,49 @@ public class ActorService {
         da = new DaoActor();
     }
 
+<<<<<<< HEAD
     public void createActor(@NotEmpty String descripcionActor, @NotEmpty Integer anioCarrera) throws Exception {
         da.getObj().setDescripcionActor(descripcionActor);
         da.getObj().setAnioCarrera(anioCarrera);
         if (!da.save())
             throw new Exception("No se pudo guardar los datos de Actor");
+=======
+    public void createActor(@NotEmpty String descripcion, int anioCarrera) throws Exception {
+        dao.getObj().setNombre(descripcion);
+        dao.getObj().setAnioCarrera(anioCarrera);
+        if (!dao.save())
+            throw new Exception("No se pudo guardar los datos del actor");
+>>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
+    }
+
+    public void updateActor(int id, @NotEmpty String descripcion, int anioCarrera) throws Exception {
+        List<Actor> lista = dao.getListaActores();
+        for (Actor a : lista) {
+            if (a.getIdActor() == id) {
+                a.setNombre(descripcion);
+                a.setAnioCarrera(anioCarrera);
+                dao.setObj(a);
+                if (!dao.updatePorId(id))
+                    throw new Exception("No se pudo actualizar el actor");
+                return;
+            }
+        }
+        throw new Exception("Actor no encontrado");
+    }
+
+    public void deleteActor(int id) throws Exception {
+        List<Actor> lista = dao.getListaActores();
+        for (Actor a : lista) {
+            if (a.getIdActor() == id) {
+                dao.delete(a);
+                return;
+            }
+        }
+        throw new Exception("Actor no encontrado");
     }
 
     public List<Actor> list(Pageable pageable) {
+<<<<<<< HEAD
         return Arrays.asList(da.listAll().toArray());
     }
 
@@ -53,5 +88,12 @@ public class ActorService {
         lista.add("Secundario");
         lista.add("Extra");
         return lista;
+=======
+        return dao.getListaActores();
+    }
+
+    public List<Actor> listAll() {
+        return dao.getListaActores();
+>>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
     }
 }
