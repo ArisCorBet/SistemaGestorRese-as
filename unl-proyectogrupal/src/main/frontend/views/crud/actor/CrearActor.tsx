@@ -12,18 +12,18 @@ import handleError from 'Frontend/views/_ErrorHandler';
 
 export function CrearActor({ onActorCreado }: { onActorCreado: () => void }) {
   const dialogOpened = useSignal(false);
-  const descripcion = useSignal('');
+  const nombre = useSignal('');
   const anioCarrera = useSignal('');
 
   const crear = async () => {
     try {
-      if (!descripcion.value.trim() || !anioCarrera.value.trim()) {
+      if (!nombre.value.trim() || !anioCarrera.value.trim()) {
         Notification.show('Por favor completa todos los campos', { theme: 'error' });
         return;
       }
-      await ActorService.createActor(descripcion.value, Number(anioCarrera.value));
+      await ActorService.createActor(nombre.value, Number(anioCarrera.value));
       dialogOpened.value = false;
-      descripcion.value = '';
+      nombre.value = '';
       anioCarrera.value = '';
       onActorCreado();
       Notification.show('Actor creado exitosamente', { theme: 'success' });
@@ -45,8 +45,8 @@ export function CrearActor({ onActorCreado }: { onActorCreado: () => void }) {
         <VerticalLayout style={{ padding: '1rem' }}>
           <TextField
             label="Nombre"
-            value={descripcion.value}
-            onChange={(e) => (descripcion.value = e.target.value)}
+            value={nombre.value}
+            onChange={(e) => (nombre.value = e.target.value)}
           />
           <NumberField
             label="Año carrera"

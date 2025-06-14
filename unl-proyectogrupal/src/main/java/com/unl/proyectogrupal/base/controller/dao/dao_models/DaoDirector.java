@@ -24,16 +24,11 @@ public class DaoDirector extends AdapterDao<Director> {
     }
 
     public Director getObj() {
-<<<<<<< HEAD
-        if (obj == null)
-            this.obj = new Director();
-        return this.obj;
-=======
+
         if (obj == null) {
             obj = new Director();
         }
         return obj;
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
     }
 
     public void setObj(Director obj) {
@@ -121,33 +116,20 @@ public class DaoDirector extends AdapterDao<Director> {
     public static void main(String[] args) {
         DaoDirector dao = new DaoDirector();
 
-<<<<<<< HEAD
-        dao.getObj().setDescripcionDirector("Director de cine independiente");
-        dao.getObj().setAniosCarrera(2005);
-=======
+
         dao.setObj(new Director());
         dao.getObj().setNombre("Isauro");
         dao.getObj().setAniosCarrera(5);
         System.out.println(dao.save() ? "Director guardado correctamente" : "Error al guardar Director");
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
+
 
         dao.setObj(new Director());
         dao.getObj().setNombre("Pool Ochoa");
         dao.getObj().setAniosCarrera(3);
         System.out.println(dao.save() ? "Director guardado correctamente" : "Error al guardar Director");
 
-<<<<<<< HEAD
-        dao.setObj(null);
-        dao.getObj().setDescripcionDirector("Director de acción");
-        dao.getObj().setAniosCarrera(2012);
 
-        if (dao.save()) {
-            System.out.println("Director guardado exitosamente.");
-        } else {
-            System.out.println("Error al guardar director.");
-        }
-=======
         System.out.println("Archivo guardado en: " + new File(base_path + "Director.json").getAbsolutePath());
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
+
     }
 }

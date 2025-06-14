@@ -22,29 +22,23 @@ public class ActorService {
         da = new DaoActor();
     }
 
-<<<<<<< HEAD
-    public void createActor(@NotEmpty String descripcionActor, @NotEmpty Integer anioCarrera) throws Exception {
-        da.getObj().setDescripcionActor(descripcionActor);
+
+    public void createActor(@NotEmpty String descripcion, int anioCarrera) throws Exception {
+        da.getObj().setNombre(descripcion);
         da.getObj().setAnioCarrera(anioCarrera);
         if (!da.save())
-            throw new Exception("No se pudo guardar los datos de Actor");
-=======
-    public void createActor(@NotEmpty String descripcion, int anioCarrera) throws Exception {
-        dao.getObj().setNombre(descripcion);
-        dao.getObj().setAnioCarrera(anioCarrera);
-        if (!dao.save())
             throw new Exception("No se pudo guardar los datos del actor");
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
+
     }
 
     public void updateActor(int id, @NotEmpty String descripcion, int anioCarrera) throws Exception {
-        List<Actor> lista = dao.getListaActores();
+        List<Actor> lista = da.getListaActores();
         for (Actor a : lista) {
             if (a.getIdActor() == id) {
                 a.setNombre(descripcion);
                 a.setAnioCarrera(anioCarrera);
-                dao.setObj(a);
-                if (!dao.updatePorId(id))
+                da.setObj(a);
+                if (!da.updatePorId(id))
                     throw new Exception("No se pudo actualizar el actor");
                 return;
             }
@@ -53,10 +47,10 @@ public class ActorService {
     }
 
     public void deleteActor(int id) throws Exception {
-        List<Actor> lista = dao.getListaActores();
+        List<Actor> lista = da.getListaActores();
         for (Actor a : lista) {
             if (a.getIdActor() == id) {
-                dao.delete(a);
+                da.delete(a);
                 return;
             }
         }
@@ -64,36 +58,12 @@ public class ActorService {
     }
 
     public List<Actor> list(Pageable pageable) {
-<<<<<<< HEAD
-        return Arrays.asList(da.listAll().toArray());
+
+        return da.getListaActores();
     }
 
     public List<Actor> listAll() {
-        return (List<Actor>) Arrays.asList(da.listAll().toArray());
-    }
+        return da.getListaActores();
 
-    public List<String> listCountry() {
-        List<String> nacionalidades = new ArrayList<>();
-        String[] countryCodes = Locale.getISOCountries();
-        for (String countryCode : countryCodes) {
-            Locale locale = new Locale("", countryCode);
-            nacionalidades.add(locale.getDisplayCountry());
-        }
-        return nacionalidades;
-    }
-
-    public List<String> listRolesActorEnum() {
-        List<String> lista = new ArrayList<>();
-        lista.add("Principal");
-        lista.add("Secundario");
-        lista.add("Extra");
-        return lista;
-=======
-        return dao.getListaActores();
-    }
-
-    public List<Actor> listAll() {
-        return dao.getListaActores();
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
     }
 }

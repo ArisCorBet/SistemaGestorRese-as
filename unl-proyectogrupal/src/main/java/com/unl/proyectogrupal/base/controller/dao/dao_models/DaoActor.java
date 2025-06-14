@@ -24,16 +24,12 @@ public class DaoActor extends AdapterDao<Actor> {
     }
 
     public Actor getObj() {
-<<<<<<< HEAD
-        if (obj == null)
-            this.obj = new Actor();
-        return this.obj;
-=======
+
         if (obj == null) {
             obj = new Actor();
         }
         return obj;
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
+
     }
 
     public void setObj(Actor obj) {
@@ -119,40 +115,21 @@ public class DaoActor extends AdapterDao<Actor> {
 
 
     public static void main(String[] args) {
-        DaoActor dao = new DaoActor();
+        DaoActor da = new DaoActor();
 
-<<<<<<< HEAD
-        // Primer actor
-        dao.getObj().setDescripcionActor("Actor dramático");
-        dao.getObj().setAnioCarrera(2010);
 
-        if (dao.save())
-            System.out.println("GUARDADO");
-        else
-            System.out.println("Hubo un error");
+        da.setObj(new Actor());
+        da.getObj().setNombre("Isauro");
+        da.getObj().setAnioCarrera(2023);
+        System.out.println(da.save() ? "Actor guardado correctamente" : "Error al guardar actor");
 
-        // Segundo actor
-        dao.setObj(null);
-        dao.getObj().setDescripcionActor("Actor de comedia");
-        dao.getObj().setAnioCarrera(2015);
-
-        if (dao.save())
-            System.out.println("GUARDADO");
-        else
-            System.out.println("Hubo un error");
-=======
-        dao.setObj(new Actor());
-        dao.getObj().setNombre("Isauro");
-        dao.getObj().setAnioCarrera(2023);
-        System.out.println(dao.save() ? "Actor guardado correctamente" : "Error al guardar actor");
-
-        dao.setObj(new Actor());
-        dao.getObj().setNombre("Pool Ochoa");
-        dao.getObj().setAnioCarrera(2024);
-        System.out.println(dao.save() ? "Actor guardado correctamente" : "Error al guardar actor");
+        da.setObj(new Actor());
+        da.getObj().setNombre("Pool Ochoa");
+        da.getObj().setAnioCarrera(2024);
+        System.out.println(da.save() ? "Actor guardado correctamente" : "Error al guardar actor");
 
         // Debug opcional para verificar dónde se guarda
         System.out.println("Archivo guardado en: " + new File(base_path + "Actor.json").getAbsolutePath());
->>>>>>> b333b9b (Subida de cambios en DAOs, Services, Models y LinkedList a rama JOSSIBEL)
+
     }
 }
