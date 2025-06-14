@@ -6,9 +6,11 @@ import handleError from 'Frontend/views/_ErrorHandler';
 import { Group, ViewToolbar } from 'Frontend/components/ViewToolbar';
 import { useDataProvider } from '@vaadin/hilla-react-crud';
 import Pelicula from 'Frontend/generated/com/unl/proyectogrupal/base/models/Pelicula';
-import { PeliculaService } from 'Frontend/generated/endpoints';
+import { PeliculaService, GeneroService } from 'Frontend/generated/endpoints';
 import { useNavigate } from 'react-router';
 import { DatePicker } from '@vaadin/react-components/DatePicker';
+import { useEffect } from 'react';
+import Genero from 'Frontend/generated/com/unl/proyectogrupal/base/models/Genero';
 
 
 
@@ -40,7 +42,7 @@ function CrearPEntryForm(props: CrearPEntryFormProps) {
   const duracion= useSignal('');
   const trailer = useSignal('');
   const fechaEstreno = useSignal('');
-  const genero = useSignal('');
+   const genero = useSignal('');
 
   const navigate = useNavigate(); // Hook de navegación
 
@@ -50,7 +52,7 @@ function CrearPEntryForm(props: CrearPEntryFormProps) {
 
   const createPelicula = async () => {
     try {
-      if (titulo.value.trim().length > 0 && sinopsis.value.trim().length > 0 && trailer.value.trim().length > 0) {
+      if (titulo.value.trim().length > 0 && sinopsis.value.trim().length > 0 && trailer.value.trim().length > 0 && genero.value.trim().length > 0) {
         const idGenero = parseInt(genero.value)+1;
         await PeliculaService.createPelicula(titulo.value, sinopsis.value, parseInt(duracion.value), trailer.value, fechaEstreno.value, idGenero);
         if (props.onCrearPCreated) {
@@ -74,6 +76,14 @@ function CrearPEntryForm(props: CrearPEntryFormProps) {
       handleError(error);
     }
   };
+
+  let listaGenero = useSignal<String[]>([]);
+    
+  useEffect(() => {
+    PeliculaService.listaGeneroCombo().then(data => {
+      listaGenero.value = data;
+    });
+  }, []);
 
   
   
@@ -136,13 +146,14 @@ function CrearPEntryForm(props: CrearPEntryFormProps) {
               value={fechaEstreno.value}
               onValueChanged={(evt) => (fechaEstreno.value = evt.detail.value)}
             />
-            <TextField
-            label="Género"
-            placeholder="Ingrese el ID del género"
-            aria-label="Género"
-            value={genero.value}
-            onValueChanged={(evt) => (genero.value = evt.detail.value)}
-          />
+            <ComboBox
+  label="Genero"
+  items={listaGenero.value}
+  aria-label='Seleccione un genero de la lista'
+  placeholder="Seleccione el genero de la pelicula"
+  value={genero.value}
+  onValueChanged={(evt) => (genero.value = evt.detail.value)}
+/>
           
 
         </VerticalLayout>
@@ -177,54 +188,69 @@ function EditarPeliculaEntryFormUpdate(props: editarPeliculaEntryFormUpdateProps
   const genero = useSignal(props.arguments.genero);
 
   const updatePelicula = async () => {
-    try {
-      if (
-        (titulo.value ?? '').trim().length > 0 &&
-        (sinopsis.value ?? '').trim().length > 0 &&
-        parseInt(duracion.value) > 0 &&
-        (trailer.value ?? '').trim().length > 0 &&
-        (fechaEstreno.value ?? '').trim().length > 0 &&
-        parseInt(genero.value) > 0
-      ) {
-        await PeliculaService.updatePelicula(
-          parseInt(ident.value),
-          titulo.value.trim(),
-          sinopsis.value.trim(),
-          parseInt(duracion.value),
-          trailer.value.trim(),
-          fechaEstreno.value,
-          parseInt(genero.value)
-        );
+  try {
+    const tituloVal = (titulo.value ?? '').trim();
+    const sinopsisVal = (sinopsis.value ?? '').trim();
+    const duracionVal = parseInt(duracion.value);
+    const trailerVal = (trailer.value ?? '').trim();
+    const fechaEstrenoVal = fechaEstreno.value;
+    const generoVal = parseInt(genero.value);
 
-        if (props.onCrearPCUpdate) {
-          props.onCrearPCUpdate();
-        }
+    const camposValidos =
+      tituloVal.length > 0 &&
+      sinopsisVal.length > 0 &&
+      !isNaN(duracionVal) && duracionVal > 0 &&
+      trailerVal.length > 0 &&
+      fechaEstrenoVal && fechaEstrenoVal.toString().trim().length > 0 &&
+      !isNaN(generoVal) && generoVal > 0;
 
-        titulo.value = '';
-        sinopsis.value = '';
-        duracion.value = '';
-        trailer.value = '';
-        fechaEstreno.value = '';
-        genero.value = '';
-        dialogOpened.value = false;
+    if (camposValidos) {
+      await PeliculaService.updatePelicula(
+        parseInt(ident.value),
+        tituloVal,
+        sinopsisVal,
+        duracionVal,
+        trailerVal,
+        fechaEstrenoVal,
+        generoVal
+      );
 
-        Notification.show('Película actualizada exitosamente', {
-          duration: 5000,
-          position: 'bottom-end',
-          theme: 'success',
-        });
-      } else {
-        Notification.show('No se pudo actualizar, faltan datos válidos', {
-          duration: 5000,
-          position: 'top-center',
-          theme: 'error',
-        });
+      if (props.onCrearPCUpdate) {
+        props.onCrearPCUpdate();
       }
-    } catch (error) {
-      console.error(error);
-      handleError(error);
+
+      titulo.value = '';
+      sinopsis.value = '';
+      duracion.value = '';
+      trailer.value = '';
+      fechaEstreno.value = '';
+      genero.value = '';
+      dialogOpened.value = false;
+
+      Notification.show('Película actualizada exitosamente', {
+        duration: 5000,
+        position: 'bottom-end',
+        theme: 'success',
+      });
+    } else {
+      Notification.show('No se pudo actualizar, faltan datos válidos', {
+        duration: 5000,
+        position: 'top-center',
+        theme: 'error',
+      });
     }
-  };
+  } catch (error) {
+    console.error(error);
+    handleError(error);
+  }
+};
+  let listaGenero = useSignal<String[]>([]);
+    
+  useEffect(() => {
+    PeliculaService.listaGeneroCombo().then(data => {
+      listaGenero.value = data;
+    });
+  }, []);
 
   return (
     <>
@@ -282,13 +308,15 @@ function EditarPeliculaEntryFormUpdate(props: editarPeliculaEntryFormUpdateProps
             value={fechaEstreno.value}
             onValueChanged={(evt) => (fechaEstreno.value = evt.detail.value)}
           />
-          <TextField
-            label="Género"
-            placeholder="Ingrese el ID del género"
-            aria-label="Género"
-            value={genero.value}
-            onValueChanged={(evt) => (genero.value = evt.detail.value)}
-          />
+          <ComboBox
+  label="Genero"
+  items={listaGenero.value}
+  aria-label='Seleccione un genero de la lista'
+  placeholder="Seleccione el genero de la pelicula"
+  value={genero.value}
+  onValueChanged={(evt) => (genero.value = evt.detail.value)}
+/>
+          
         </VerticalLayout>
       </Dialog>
       <Button onClick={() => { dialogOpened.value = true; }}>
@@ -297,6 +325,8 @@ function EditarPeliculaEntryFormUpdate(props: editarPeliculaEntryFormUpdateProps
     </>
   );
 }
+
+
 
 
 
@@ -344,7 +374,7 @@ export default function PeliculaView() {
         
         </GridColumn>
 
-        <GridColumn path="genero" header="Genero" />
+        <GridColumn path="idGenero" header="Genero" />
         <GridColumn path="" header="">
 
         </GridColumn>
