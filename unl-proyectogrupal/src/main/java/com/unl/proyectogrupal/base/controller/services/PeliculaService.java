@@ -1,10 +1,14 @@
 package com.unl.proyectogrupal.base.controller.services;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
+import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoGenero;
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoPelicula;
+import com.unl.proyectogrupal.base.models.Genero;
 import com.unl.proyectogrupal.base.models.Pelicula;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
@@ -21,7 +25,7 @@ public class PeliculaService {
         this.dp = new DaoPelicula();
     }
 
-    public void createPelicula(@NotEmpty String titulo,@NotEmpty String sinopsis, Integer duracion,@NotEmpty String trailer, Date fechaEsteno, Integer idGenero ) throws Exception {
+    public void createPelicula(@NotEmpty String titulo, @NotEmpty String sinopsis, Integer duracion,@NotEmpty String trailer, Date fechaEsteno, Integer idGenero ) throws Exception {
         if (titulo.trim().length() > 0 && sinopsis.trim().length() > 0 && trailer.trim().length() > 0 && duracion > 0 && idGenero > 0) {
             dp.getObj().setTitulo(titulo);
             dp.getObj().setSinopsis(sinopsis);
@@ -36,7 +40,8 @@ public class PeliculaService {
     }
     public void updatePelicula(Integer id,@NotEmpty String titulo,@NotEmpty String sinopsis, Integer duracion,@NotEmpty String trailer, Date fechaEsteno, Integer idGenero ) throws Exception {
         if (titulo.trim().length() > 0 && sinopsis.trim().length() > 0 && trailer.trim().length() > 0 && duracion > 0 && idGenero > 0) {
-            dp.setObj(dp.listAll().get(id - 1));            dp.getObj().setTitulo(titulo);
+            dp.setObj(dp.listAll().get(id - 1));            
+            dp.getObj().setTitulo(titulo);
             dp.getObj().setSinopsis(sinopsis);
             dp.getObj().setDuracion(duracion);
             dp.getObj().setTrailer(trailer);
@@ -48,21 +53,6 @@ public class PeliculaService {
         }
     }
 
-    
-    /*public List<HashMap> listaAlbumGenero() {
-        List<HashMap> lista = new ArrayList<>();
-        DaoGenero da = new DaoGenero();
-        if(!da.listAll().isEmpty()) {
-            Genero [] arreglo = da.listAll().toArray();
-            for(int i = 0; i < arreglo.length; i++) {
-                HashMap<String, String> aux = new HashMap<>();
-                aux.put("value", arreglo[i].getId().toString(i)); 
-                aux.put("label", arreglo[i].getNombre()); 
-                lista.add(aux);  
-            }
-        }
-        return lista;
-    }*/
 
     public List<HashMap> listPelicula(){
         List<HashMap> lista = new ArrayList<>();
@@ -82,8 +72,24 @@ public class PeliculaService {
             }
         }
         return lista;
+    }
+
+    public List<HashMap> listaGeneroCombo(){
+        List<HashMap> lista = new ArrayList<>();
+        DaoGenero dg = new DaoGenero();
+        if(!dg.listAll().isEmpty()) {
+            Genero [] arreglo = dg.listAll().toArray();
+            for(int i = 0; i < arreglo.length; i++){
+                HashMap<String, String> aux = new HashMap<>();
+                aux.put("value", arreglo[i].getIdGenero().toString()); 
+                aux.put("label", arreglo[i].getNombre());  
+                lista.add(aux);    
+            }
+        }
+        return lista;
+    }
     
     }
 
     
-}
+
