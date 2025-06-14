@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavLink } from 'react-router';
+
 
 // Definimos un componente funcional llamado HolaMundo
 const editarPelicula: React.FC = () => {
@@ -9,5 +11,6 @@ const editarPelicula: React.FC = () => {
     </div>
   );
 };
+
 
 export default editarPelicula;

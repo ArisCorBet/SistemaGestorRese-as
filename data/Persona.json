@@ -1,1 +1,21 @@
-[{"id":1,"nombre":"Luis Miguel","apellido":"Sanches Torres","fechaNacimiento":"15/05/2000"}]
+[
+  { "id": 1, "nombre": "Luis Miguel" },
+  {
+    "id": 2,
+    "nombre": "Isauro RIvera",
+    "telefono": "2005-04-06",
+    "fecha_nacimiento": "Jan 12, 1970, 5:37:54 AM"
+  },
+  {
+    "id": 3,
+    "nombre": "Ariana Granda",
+    "telefono": "2001-11-08",
+    "fecha_nacimiento": "Dec 31, 1969, 8:42:31 PM"
+  },
+  {
+    "id": 4,
+    "nombre": "Cristhian",
+    "telefono": "2025-06-07",
+    "fecha_nacimiento": "Dec 31, 1969, 7:00:06 PM"
+  }
+]
