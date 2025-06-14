@@ -2,7 +2,9 @@ package com.unl.proyectogrupal.base.models;
 
 public class Director {
     private int idDirector;
-    private String descripcion;
+
+    private String nombre;
+
     private int aniosCarrera;
 
     public int getIdDirector() {
@@ -13,12 +15,14 @@ public class Director {
         this.idDirector = idDirector;
     }
 
-    public String getDescripcion() {
-        return this.descripcion;
+
+    public String getNombre() {
+        return this.nombre;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+
     }
 
     public int getAniosCarrera() {
@@ -28,4 +32,5 @@ public class Director {
     public void setAniosCarrera(int aniosCarrera) {
         this.aniosCarrera = aniosCarrera;
     }
+
 }
