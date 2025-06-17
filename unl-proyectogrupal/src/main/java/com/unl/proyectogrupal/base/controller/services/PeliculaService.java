@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoGenero;
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoPelicula;
+import com.unl.proyectogrupal.base.controller.data_struct.list.LinkedList;
 import com.unl.proyectogrupal.base.models.Genero;
 import com.unl.proyectogrupal.base.models.Pelicula;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -88,6 +89,24 @@ public class PeliculaService {
         }
         return lista;
     }
+
+    public List<HashMap> listAll() throws Exception{
+        return Arrays.asList(dp.all().toArray());
+    }
+
+    public List<HashMap> search(String attribute, String text, Integer type) throws Exception {
+        LinkedList<HashMap<String, Object>> lista = dp.search(attribute, text, type);
+        if(!lista.isEmpty())
+            return Arrays.asList(lista.toArray());
+        else
+            return new ArrayList<>();
+    }
+
+
+    public List<HashMap> order(String attribute, Integer type)throws Exception{
+        return Arrays.asList(dp.orderByCancion(type, attribute).toArray());
+    }
+
     
     }
 
