@@ -1,37 +1,53 @@
-import { Button, Dialog, Notification, VerticalLayout } from '@vaadin/react-components';
+import { Button, Dialog, VerticalLayout, HorizontalLayout, Notification } from '@vaadin/react-components';
+import { useState } from 'react';
 import { RepartoPeliculaService } from 'Frontend/generated/endpoints';
-import handleError from 'Frontend/views/_ErrorHandler';
-import RepartoPelicula from 'Frontend/generated/com/unl/proyectogrupal/base/models/RepartoPelicula';
 
-export function EliminarReparto({
-  reparto,
-  onCancel,
-  onDeleted,
-}: {
-  reparto: RepartoPelicula;
-  onCancel: () => void;
-  onDeleted: () => void;
+export function EliminarReparto({ 
+  reparto, 
+  onCancel, 
+  onDeleted 
+}: { 
+  reparto: any, 
+  onCancel: () => void, 
+  onDeleted: () => void 
 }) {
-  const confirmar = async () => {
+  const [cargando, setCargando] = useState(false);
+
+  const manejarEliminar = async () => {
+    setCargando(true);
     try {
       await RepartoPeliculaService.deleteReparto(reparto.idActor, reparto.idPelicula);
-      Notification.show('Reparto eliminado correctamente', { theme: 'success' });
+      Notification.show("Reparto eliminado exitosamente");
       onDeleted();
-    } catch (err) {
-      handleError(err);
+    } catch (error: any) {
+      console.error("Error al eliminar reparto:", error);
+      Notification.show(error.message || "Error al eliminar reparto", { theme: "error" });
+    } finally {
+      setCargando(false);
     }
   };
 
   return (
-    <Dialog opened onOpenedChanged={(e) => !e.detail.value && onCancel()}>
-      <VerticalLayout style={{ padding: '1rem' }}>
-        <h4>
-          ¿Estás seguro que deseas eliminar el reparto del actor {reparto.idActor} en la película {reparto.idPelicula}?
-        </h4>
-        <Button theme="error" onClick={confirmar}>
-          Eliminar
-        </Button>
-        <Button onClick={onCancel}>Cancelar</Button>
+    <Dialog 
+      opened={true}
+      onOpenedChanged={({detail}) => !detail.value && onCancel()}
+      header="Confirmar Eliminación"
+      footer={
+        <HorizontalLayout style={{ justifyContent: 'flex-end', gap: '1rem' }}>
+          <Button onClick={onCancel} theme="tertiary">
+            Cancelar
+          </Button>
+          <Button onClick={manejarEliminar} theme="error" disabled={cargando}>
+            {cargando ? 'Eliminando...' : 'Confirmar Eliminación'}
+          </Button>
+        </HorizontalLayout>
+      }
+    >
+      <VerticalLayout style={{ gap: '1rem' }}>
+        <p>¿Estás seguro de eliminar este reparto?</p>
+        <p><strong>Actor:</strong> {reparto.nombreActor}</p>
+        <p><strong>Película:</strong> {reparto.tituloPelicula}</p>
+        <p><strong>Papel:</strong> {reparto.papelActor}</p>
       </VerticalLayout>
     </Dialog>
   );

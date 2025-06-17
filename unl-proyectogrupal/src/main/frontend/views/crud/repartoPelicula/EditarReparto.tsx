@@ -1,56 +1,125 @@
-import {
-  Button,
-  Dialog,
-  Notification,
-  TextField,
+import { useState, useEffect } from 'react';
+import { 
+  Button, 
+  Dialog, 
+  TextField, 
+  ComboBox,
   VerticalLayout,
-  NumberField,
+  HorizontalLayout,
+  Notification
 } from '@vaadin/react-components';
-import { useSignal } from '@vaadin/hilla-react-signals';
-import RepartoPelicula from 'Frontend/generated/com/unl/proyectogrupal/base/models/RepartoPelicula';
 import { RepartoPeliculaService } from 'Frontend/generated/endpoints';
-import handleError from 'Frontend/views/_ErrorHandler';
 
-export function EditarReparto({
-  reparto,
-  onCancel,
-  onUpdated,
-}: {
-  reparto: RepartoPelicula;
-  onCancel: () => void;
-  onUpdated: () => void;
+interface ComboItem {
+  value: string;
+  label: string;
+}
+
+export function EditarReparto({ 
+  reparto, 
+  onCancel, 
+  onUpdated 
+}: { 
+  reparto: any, 
+  onCancel: () => void, 
+  onUpdated: () => void 
 }) {
-  const papelActor = useSignal(reparto.papelActor);
-  // Los ids no se editan porque forman la clave compuesta
-  const guardar = async () => {
+  const [cargando, setCargando] = useState(false);
+  const [formulario, setFormulario] = useState({
+    idActor: reparto.idActor.toString(),
+    idPelicula: reparto.idPelicula.toString(),
+    papelActor: reparto.papelActor
+  });
+
+  const [actores, setActores] = useState<ComboItem[]>([]);
+  const [peliculas, setPeliculas] = useState<ComboItem[]>([]);
+
+  useEffect(() => {
+    const cargarOpciones = async () => {
+      setCargando(true);
+      try {
+        const [actoresData, peliculasData] = await Promise.all([
+          RepartoPeliculaService.listActoresForCombo(),
+          RepartoPeliculaService.listPeliculasForCombo()
+        ]);
+        
+        setActores(actoresData);
+        setPeliculas(peliculasData);
+      } catch (error) {
+        console.error("Error al cargar opciones:", error);
+        Notification.show("Error al cargar opciones", { theme: "error" });
+      } finally {
+        setCargando(false);
+      }
+    };
+    cargarOpciones();
+  }, []);
+
+  const manejarEnviar = async () => {
+    if (!formulario.idActor || !formulario.idPelicula || !formulario.papelActor) {
+      Notification.show("Todos los campos son requeridos", { theme: "error" });
+      return;
+    }
+
+    setCargando(true);
     try {
       await RepartoPeliculaService.updateReparto(
-        reparto.idActor,
-        reparto.idPelicula,
-        papelActor.value
+        parseInt(formulario.idActor),
+        parseInt(formulario.idPelicula),
+        formulario.papelActor
       );
-      Notification.show('Reparto actualizado correctamente', { theme: 'success' });
+      Notification.show("Reparto actualizado exitosamente");
       onUpdated();
-    } catch (err) {
-      handleError(err);
+    } catch (error: any) {
+      console.error("Error al actualizar reparto:", error);
+      Notification.show(error.message || "Error al actualizar reparto", { theme: "error" });
+    } finally {
+      setCargando(false);
     }
   };
 
   return (
-    <Dialog opened onOpenedChanged={(e) => !e.detail.value && onCancel()}>
-      <VerticalLayout style={{ padding: '1rem' }}>
-        <h4>Editar Reparto</h4>
-        <p>ID Actor: {reparto.idActor}</p>
-        <p>ID Película: {reparto.idPelicula}</p>
+    <Dialog 
+      opened={true}
+      onOpenedChanged={({detail}) => !detail.value && onCancel()}
+      header={`Editar Reparto: ${reparto.nombreActor} en ${reparto.tituloPelicula}`}
+      footer={
+        <HorizontalLayout style={{ justifyContent: 'flex-end', gap: '1rem' }}>
+          <Button onClick={onCancel} theme="tertiary">
+            Cancelar
+          </Button>
+          <Button onClick={manejarEnviar} theme="primary" disabled={cargando}>
+            {cargando ? 'Guardando...' : 'Guardar'}
+          </Button>
+        </HorizontalLayout>
+      }
+    >
+      <VerticalLayout style={{ gap: '1rem', width: '300px' }}>
+        <ComboBox
+          label="Actor"
+          items={actores}
+          value={formulario.idActor}
+          onValueChanged={(e) => setFormulario({...formulario, idActor: e.detail.value})}
+          required
+          disabled={cargando}
+        />
+
+        <ComboBox
+          label="Película"
+          items={peliculas}
+          value={formulario.idPelicula}
+          onValueChanged={(e) => setFormulario({...formulario, idPelicula: e.detail.value})}
+          required
+          disabled={cargando}
+        />
+
         <TextField
           label="Papel del Actor"
-          value={papelActor.value}
-          onChange={(e) => (papelActor.value = e.target.value)}
+          value={formulario.papelActor}
+          onValueChanged={(e) => setFormulario({...formulario, papelActor: e.detail.value})}
+          required
+          disabled={cargando}
         />
-        <Button theme="primary" onClick={guardar}>
-          Guardar
-        </Button>
-        <Button onClick={onCancel}>Cancelar</Button>
       </VerticalLayout>
     </Dialog>
   );

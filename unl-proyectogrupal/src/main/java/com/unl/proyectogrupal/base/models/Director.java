@@ -5,7 +5,7 @@ public class Director {
 
     private String nombre;
 
-    private int aniosCarrera;
+    private int anioCarrera;
 
     public int getIdDirector() {
         return this.idDirector;
@@ -26,11 +26,11 @@ public class Director {
     }
 
     public int getAniosCarrera() {
-        return this.aniosCarrera;
+        return this.anioCarrera;
     }
 
     public void setAniosCarrera(int aniosCarrera) {
-        this.aniosCarrera = aniosCarrera;
+        this.anioCarrera = aniosCarrera;
     }
 
 }
