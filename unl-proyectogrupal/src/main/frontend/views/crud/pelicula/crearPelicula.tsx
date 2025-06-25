@@ -1,5 +1,5 @@
 import { ViewConfig } from '@vaadin/hilla-file-router/types.js';
-import { Button, ComboBox, Dialog, Grid, GridColumn, GridItemModel, TextField, VerticalLayout } from '@vaadin/react-components';
+import { Button, ComboBox, Dialog, Grid, GridColumn, GridItemModel, GridSortColumn, HorizontalLayout, Icon, Select, TextField, VerticalLayout } from '@vaadin/react-components';
 import { Notification } from '@vaadin/react-components/Notification';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import handleError from 'Frontend/views/_ErrorHandler';
@@ -9,7 +9,7 @@ import Pelicula from 'Frontend/generated/com/unl/proyectogrupal/base/models/Peli
 import { PeliculaService, GeneroService } from 'Frontend/generated/endpoints';
 import { useNavigate } from 'react-router';
 import { DatePicker } from '@vaadin/react-components/DatePicker';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Genero from 'Frontend/generated/com/unl/proyectogrupal/base/models/Genero';
 
 
@@ -81,7 +81,7 @@ function CrearPEntryForm(props: CrearPEntryFormProps) {
     
   useEffect(() => {
     PeliculaService.listaGeneroCombo().then(data => {
-      listaGenero.value = data;
+      listaGenero.label = data;
     });
   }, []);
 
@@ -326,16 +326,57 @@ function EditarPeliculaEntryFormUpdate(props: editarPeliculaEntryFormUpdateProps
   );
 }
 
-
-
-
-
-
-//LISTA DE Peliculas
+//Funcion de Ordenacion con el Metodo QuickSort 
 export default function PeliculaView() {
-  const dataProvider = useDataProvider<Pelicula>({
-    list: () => PeliculaService.listPelicula(),
-  });
+  
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    PeliculaService.listAll().then(function (data) {
+      //items.values = data;
+      setItems(data);
+    });
+  }, []);
+
+  
+ const order = (event, columnId) => {
+    console.log(event);
+    const direction = event.detail.value;
+    console.log(`Sort direction changed for column ${columnId} to ${direction}`);
+    var dir = (direction == 'asc') ? 1 : 2;
+    PeliculaService.order(columnId, dir).then(function(data){
+      setItems(data);
+    });
+  }
+
+
+  const criterio = useSignal('');
+    const texto = useSignal('');
+    const itemSelect = [
+      {
+        label: 'Titulo',
+        value: 'Titulo',
+      },
+      
+    ];
+    const search = async () => {
+      try {
+        console.log(criterio.value+" "+texto.value);
+        PeliculaService.search(criterio.value, texto.value, 0).then(function (data) {
+          setItems(data);
+        });
+  
+        criterio.value = '';
+        texto.value = '';
+  
+        Notification.show('Busqueda realizada', { duration: 5000, position: 'bottom-end', theme: 'success' });
+  
+  
+      } catch (error) {
+        console.log(error);
+        handleError(error);
+      }
+    };
+
 
  
 
@@ -348,10 +389,20 @@ export default function PeliculaView() {
   }
 
  function EditarBoton({ item }: { item: Pelicula }) {
-  return (
-    <EditarPeliculaEntryFormUpdate arguments={item} onCrearPCUpdate={dataProvider.refresh} />
-  );
-}
+    return (
+      <EditarPeliculaEntryFormUpdate 
+  arguments={{ 
+    id: item,
+    titulo: item.titulo,
+    sinopsis: item.sinopsis,
+    duracion: item.duracion,
+    trailer: item.trailer,
+    fechaEstreno: item.fechaEstreno,
+    idGenero: item.idGenero
+  }} 
+/>
+    );
+  }
 
   return (
 
@@ -359,14 +410,34 @@ export default function PeliculaView() {
 
       <ViewToolbar title="Creacion de Peliculas">
         <Group>
-          <CrearPEntryForm onCrearPCreated={dataProvider.refresh}/>
+          <CrearPEntryForm onCrearPCreated={items.refresh}/>
         </Group>
       </ViewToolbar>
-      <Grid dataProvider={dataProvider.dataProvider}>
-        <GridColumn header="Acciones" renderer={({ item }) => <EditarBoton item={item} />} />
+      <HorizontalLayout theme="spacing">
+          <Select items={itemSelect}
+            value={criterio.value}
+            onValueChanged={(evt) => (criterio.value = evt.detail.value)}
+            placeholder="Selecione un cirterio">
+          </Select>
+  
+          <TextField
+            placeholder="Search"
+            style={{ width: '50%' }}
+            value={texto.value}
+            onValueChanged={(evt) => (texto.value = evt.detail.value)}
+          >
+            <Icon slot="prefix" icon="vaadin:search" />
+          </TextField>
+          <Button onClick={search} theme="primary">
+            Buscar
+          </Button>
+        </HorizontalLayout>
+
+      <Grid items={items}>
+        <GridColumn header="Acciones" renderer={ EditarBoton}/>
         <GridColumn  renderer={indexIndex} header="Nro" />
-        <GridColumn path="titulo" header="Nombre de la pelicula" />
-        <GridColumn path="sinopsis" header="Sinopsis" />
+        <GridSortColumn path="titulo" header="Nombre de la pelicula" />
+        <GridSortColumn path="sinopsis" header="Sinopsis" />
         <GridColumn path="duracion" header="Duracion" />
         <GridColumn path="trailer" header="Trailer" />
 
