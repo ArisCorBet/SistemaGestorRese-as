@@ -3,6 +3,7 @@ package com.unl.proyectogrupal.base.models;
 public class DireccionPelicula {
     private int idDirector;
     private int idPelicula;
+    private int idRelacion;
 
     public int getIdDirector() {
         return this.idDirector;
@@ -19,6 +20,16 @@ public class DireccionPelicula {
     public void setIdPelicula(int idPelicula) {
         this.idPelicula = idPelicula;
     }
+
+    public int getIdRelacion() {
+        return this.idRelacion;
+    }
+
+    public void setIdRelacion(int idRelacion) {
+        this.idRelacion = idRelacion;
+    }
+
+   
 
     
 }

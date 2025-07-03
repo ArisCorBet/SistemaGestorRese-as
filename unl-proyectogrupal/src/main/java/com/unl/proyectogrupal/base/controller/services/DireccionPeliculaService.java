@@ -1,35 +1,52 @@
 package com.unl.proyectogrupal.base.controller.services;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoDireccionPelicula;
 import com.unl.proyectogrupal.base.models.DireccionPelicula;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.hilla.Endpoint;
-import com.vaadin.hilla.mappedtypes.Pageable;
 
-@Endpoint
-@AnonymousAllowed
+import java.util.List;
+
 public class DireccionPeliculaService {
+
     private DaoDireccionPelicula dao;
 
     public DireccionPeliculaService() {
-        dao = new DaoDireccionPelicula();
+        this.dao = new DaoDireccionPelicula();
     }
 
-    public void createDireccion(int idDirector, int idPelicula) throws Exception {
-        dao.getObj().setIdDirector(idDirector);
-        dao.getObj().setIdPelicula(idPelicula);
-        if (!dao.save())
-            throw new Exception("No se pudo guardar la dirección de la película");
+    public List<DireccionPelicula> listarTodas() {
+        return dao.getListaDireccionPeliculas();
     }
 
-    public List<DireccionPelicula> list(Pageable pageable) {
-        return Arrays.asList(dao.listAll().toArray());
+    public boolean crearDireccion(DireccionPelicula direccion) {
+        dao.setObj(direccion);
+        return dao.save();
     }
 
-    public List<DireccionPelicula> listAll() {
-        return Arrays.asList(dao.listAll().toArray());
+    public boolean actualizarDireccion(int idRelacion, DireccionPelicula direccionActualizada) {
+        dao.setObj(direccionActualizada);
+        return dao.updatePorId(idRelacion);
+    }
+
+    public boolean eliminarDireccion(DireccionPelicula direccion) {
+        try {
+            dao.delete(direccion);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al eliminar DirecciónPelicula: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public DireccionPelicula obtenerPorId(int idRelacion) {
+        try {
+            List<DireccionPelicula> lista = dao.getListaDireccionPeliculas();
+            return lista.stream()
+                    .filter(d -> d.getIdRelacion() == idRelacion)
+                    .findFirst()
+                    .orElse(null);
+        } catch (Exception e) {
+            System.err.println("Error al obtener DirecciónPelicula por ID: " + e.getMessage());
+            return null;
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.unl.proyectogrupal.base.controller.data_struct.list;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class LinkedList<E> {
     private Node<E> head;
@@ -230,6 +232,15 @@ public class LinkedList<E> {
             length--;
             return element;
         }
+    }
+    public List<E> toJavaList() {
+        List<E> result = new ArrayList<>();
+        Node<E> current = head;
+        while (current != null) {
+            result.add(current.getData());
+            current = current.getNext();
+        }
+        return result;
     }
 
     
