@@ -1,7 +1,10 @@
 package com.unl.proyectogrupal.base.controller.dao.dao_models;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
+import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
 import com.unl.proyectogrupal.base.controller.Utiles;
 import com.unl.proyectogrupal.base.controller.dao.AdapterDao;  
 import com.unl.proyectogrupal.base.models.Pelicula;
@@ -47,6 +50,68 @@ public class DaoPelicula extends AdapterDao<Pelicula> {
         }
     }
 
+    public Boolean updatePorId(int idPelicula) {
+        try {
+            int pos = obtenerPosicionPorId(idPelicula);
+            if (pos >= 0) {
+                this.update(obj, pos);
+                return true;
+            } else {
+                System.err.println("Pelicula con id " + idPelicula + " no encontrado");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Error al actualizar Pelicula: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void delete(Pelicula pelicula) {
+        try {
+            List<Pelicula> peliculas = getListaPeliculas();
+            peliculas.removeIf(a -> a.getId() == pelicula.getId());
+            persistAll(peliculas);
+        } catch (Exception e) {
+            System.err.println("Error al eliminar pelicula: " + e.getMessage());
+        }
+    }
+
+    public List<Pelicula> getListaPeliculas() {
+        List<Pelicula> lista = new ArrayList<>();
+        var linkedList = super.listAll();
+        for (int i = 0; i < linkedList.getLength(); i++) {
+            lista.add(linkedList.get(i));
+        }
+        return lista;
+    }
+
+    private void persistAll(List<Pelicula> peliculas) throws Exception {
+        String json = new com.google.gson.Gson().toJson(peliculas);
+        saveFile(json);
+    }
+
+    private void saveFile(String data) throws Exception {
+        File file = new File(base_path + "Pelicula.json");
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        try (FileWriter fw = new FileWriter(file, false)) {
+            fw.write(data);
+            fw.flush();
+        }
+    }
+
+    private int obtenerPosicionPorId(int idPelicula) {
+        var lista = super.listAll();
+        for (int i = 0; i < lista.getLength(); i++) {
+            if (lista.get(i).getId() == idPelicula) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
     public Boolean listar() {
         try {
             this.listAll();
@@ -72,24 +137,29 @@ public class DaoPelicula extends AdapterDao<Pelicula> {
         return lista;
     }
 
-    private HashMap<String, Object> toDict(Pelicula arreglo, Integer i) {
-        
+    private HashMap<String, Object> toDict(Pelicula p, Integer i) {
         HashMap<String, Object> aux = new HashMap<>();
-        aux.put("id", arreglo.getId().toString());
-        aux.put("titulo", arreglo.getTitulo());
-        aux.put("sinopsis", arreglo.getSinopsis());
-        aux.put("duracion", arreglo.getDuracion());
-        aux.put("trailer", arreglo.getTrailer());
-        aux.put("FechaEstreno", arreglo.getFechaEstreno());
-        //aux.put("genero", d.listAll().get(arreglo.getId_genero() - 1).getNombre());
+        aux.put("id", p.getId());
+        aux.put("titulo", p.getTitulo());
+        aux.put("sinopsis", p.getSinopsis());
+        aux.put("duracion", p.getDuracion());
+        aux.put("trailer", p.getTrailer());
+        aux.put("fechaEstreno", p.getFechaEstreno());
+        aux.put("imagen", p.getImagen());
 
-        
+        // Convertir las LinkedLists a arreglos normales para el JSON
+        aux.put("idGenero", p.getIdGenero().toArray());
+        aux.put("idActores", p.getIdActores().toArray());
+        aux.put("idDirector", p.getIdDirector().toArray());
+
         return aux;
     }
 
 
+
+
     //Metodo Quicksort
-    public LinkedList<HashMap<String, Object>> orderByCancion(Integer type, String attribute) throws Exception {
+    public LinkedList<HashMap<String, Object>> orderByPelicula(Integer type, String attribute) throws Exception {
         LinkedList<HashMap<String, Object>> lista = all();
         if (!listAll().isEmpty()) {
             HashMap arr[] = lista.toArray();
@@ -142,8 +212,46 @@ public class DaoPelicula extends AdapterDao<Pelicula> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'search'");
     }
+    public static void main(String[] args) {
+        DaoPelicula daoPelicula = new DaoPelicula();
+        Pelicula p = new Pelicula();
 
-    
+        p.setId(daoPelicula.listAll().getLength() + 1);
+        p.setTitulo("Matrix Reloaded");
+        p.setSinopsis("Neo y la resistencia luchan contra las máquinas.");
+        p.setDuracion(138);
+        p.setImagen("matrix-reloaded.jpg");
+        p.setTrailer("https://youtu.be/3PNrp0z_X4Y");
+        p.setFechaEstreno(new Date());
 
-    
+        // Crear y llenar la LinkedList personalizada para géneros
+        LinkedList<Integer> generos = new LinkedList<>();
+        generos.add(1);  // ID de Acción
+        generos.add(2);  // ID de Ciencia Ficción
+        p.setIdGenero(generos);
+
+        // Crear y llenar LinkedList de actores
+        LinkedList<Integer> actores = new LinkedList<>();
+        actores.add(1);  // ID de Keanu Reeves
+        actores.add(2);  // ID de Laurence Fishburne
+        p.setIdActores(actores);
+
+        // Crear y llenar LinkedList de directores
+        LinkedList<Integer> directores = new LinkedList<>();
+        directores.add(1);  // ID de Lana Wachowski
+        directores.add(2);  // ID de Lilly Wachowski
+        p.setIdDirector(directores);
+
+        // Guardar
+        daoPelicula.setObj(p);
+        if (daoPelicula.save()) {
+            System.out.println("PELÍCULA GUARDADA CON ÉXITO");
+        } else {
+            System.out.println("ERROR AL GUARDAR");
+        }
+    }
+
+
+
+
 }

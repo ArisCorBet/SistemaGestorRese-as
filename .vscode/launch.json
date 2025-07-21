@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DaoPelicula",
+            "request": "launch",
+            "mainClass": "com.unl.proyectogrupal.base.controller.dao.dao_models.DaoPelicula",
+            "projectName": "unl-proyectogrupal"
+        },
+        {
+            "type": "java",
             "name": "DaoDireccionPelicula",
             "request": "launch",
             "mainClass": "com.unl.proyectogrupal.base.controller.dao.dao_models.DaoDireccionPelicula",
