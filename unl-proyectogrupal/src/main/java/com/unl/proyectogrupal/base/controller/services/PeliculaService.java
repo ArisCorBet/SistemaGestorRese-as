@@ -1,10 +1,10 @@
 package com.unl.proyectogrupal.base.controller.services;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoGenero;
 import com.unl.proyectogrupal.base.controller.dao.dao_models.DaoPelicula;
@@ -18,97 +18,109 @@ import jakarta.validation.constraints.NotEmpty;
 
 @BrowserCallable
 @AnonymousAllowed
-
 public class PeliculaService {
+
     private DaoPelicula dp;
 
     public PeliculaService() {
         this.dp = new DaoPelicula();
     }
 
-    public void createPelicula(@NotEmpty String titulo, @NotEmpty String sinopsis, Integer duracion,@NotEmpty String trailer, Date fechaEsteno, Integer idGenero ) throws Exception {
-        if (titulo.trim().length() > 0 && sinopsis.trim().length() > 0 && trailer.trim().length() > 0 && duracion > 0 && idGenero > 0) {
-            dp.getObj().setTitulo(titulo);
-            dp.getObj().setSinopsis(sinopsis);
-            dp.getObj().setDuracion(duracion);
-            dp.getObj().setTrailer(trailer);
-            dp.getObj().setFechaEstreno(fechaEsteno);
-            dp.getObj().setIdGenero(idGenero);
+    public void createPelicula(@NotEmpty String titulo, @NotEmpty String sinopsis, Integer duracion,
+                                @NotEmpty String trailer, Date fechaEstreno, Integer idGenero) throws Exception {
+        if (titulo.trim().length() > 0 && sinopsis.trim().length() > 0 && trailer.trim().length() > 0 &&
+                duracion != null && duracion > 0 && idGenero != null && idGenero > 0) {
 
-            if (!dp.save())
-                throw new Exception("No se pudo guardar los datos de la Pelicula");
-        }
-    }
-    public void updatePelicula(Integer id,@NotEmpty String titulo,@NotEmpty String sinopsis, Integer duracion,@NotEmpty String trailer, Date fechaEsteno, Integer idGenero ) throws Exception {
-        if (titulo.trim().length() > 0 && sinopsis.trim().length() > 0 && trailer.trim().length() > 0 && duracion > 0 && idGenero > 0) {
-            dp.setObj(dp.listAll().get(id - 1));            
-            dp.getObj().setTitulo(titulo);
-            dp.getObj().setSinopsis(sinopsis);
-            dp.getObj().setDuracion(duracion);
-            dp.getObj().setTrailer(trailer);
-            dp.getObj().setFechaEstreno(fechaEsteno);
-            dp.getObj().setIdGenero(idGenero);
-    
-            if (!dp.update(id -1))
-                throw new Exception("No se pudo guardar los datos de la Pelicula");
+            Pelicula pelicula = new Pelicula();
+            pelicula.setTitulo(titulo);
+            pelicula.setSinopsis(sinopsis);
+            pelicula.setDuracion(duracion);
+            pelicula.setTrailer(trailer);
+            pelicula.setFechaEstreno(fechaEstreno);
+
+            LinkedList<Integer> generoList = new LinkedList<>();
+            generoList.add(idGenero);
+            pelicula.setIdGenero(generoList);
+
+            dp.setObj(pelicula);
+            if (!dp.save()) {
+                throw new Exception("No se pudo guardar los datos de la Película.");
+            }
         }
     }
 
+    public void updatePelicula(Integer id, @NotEmpty String titulo, @NotEmpty String sinopsis, Integer duracion,
+                                @NotEmpty String trailer, Date fechaEstreno, Integer idGenero) throws Exception {
+        if (titulo.trim().length() > 0 && sinopsis.trim().length() > 0 && trailer.trim().length() > 0 &&
+                duracion != null && duracion > 0 && idGenero != null && idGenero > 0) {
 
-    public List<HashMap> listPelicula(){
+            Pelicula pelicula = dp.listAll().get(id - 1);
+            pelicula.setTitulo(titulo);
+            pelicula.setSinopsis(sinopsis);
+            pelicula.setDuracion(duracion);
+            pelicula.setTrailer(trailer);
+            pelicula.setFechaEstreno(fechaEstreno);
+
+            LinkedList<Integer> generoList = new LinkedList<>();
+            generoList.add(idGenero);
+            pelicula.setIdGenero(generoList);
+
+            dp.setObj(pelicula);
+            if (!dp.updatePorId(id)) {
+                throw new Exception("No se pudo actualizar la Película.");
+            }
+        }
+    }
+
+    public List<HashMap> listPelicula() {
         List<HashMap> lista = new ArrayList<>();
-        if(!dp.listAll().isEmpty()) {
-            Pelicula [] arreglo = dp.listAll().toArray();
-      
-            for(int i = 0; i < arreglo.length; i++) {
+        if (!dp.listAll().isEmpty()) {
+            Pelicula[] arreglo = dp.listAll().toArray();
+
+            for (Pelicula p : arreglo) {
                 HashMap<String, String> aux = new HashMap<>();
-                aux.put("id", String.valueOf(arreglo[i].getId().toString()));
-                aux.put("titulo", arreglo[i].getTitulo());
-                aux.put("sinopsis", arreglo[i].getSinopsis());
-                aux.put("duracion", String.valueOf(arreglo[i].getDuracion()));
-                aux.put("trailer", arreglo[i].getTrailer());
-                aux.put("fechaEstreno", String.valueOf(arreglo[i].getFechaEstreno()));
-                aux.put("idGenero", String.valueOf(arreglo[i].getIdGenero()));
+                aux.put("id", String.valueOf(p.getId()));
+                aux.put("titulo", p.getTitulo());
+                aux.put("sinopsis", p.getSinopsis());
+                aux.put("duracion", String.valueOf(p.getDuracion()));
+                aux.put("trailer", p.getTrailer());
+                aux.put("fechaEstreno", String.valueOf(p.getFechaEstreno()));
+                aux.put("idGenero", p.getIdGenero() != null ? p.getIdGenero().toString() : "");
                 lista.add(aux);
             }
         }
         return lista;
     }
 
-    public List<HashMap> listaGeneroCombo(){
+    public List<HashMap> listaGeneroCombo() {
         List<HashMap> lista = new ArrayList<>();
         DaoGenero dg = new DaoGenero();
-        if(!dg.listAll().isEmpty()) {
-            Genero [] arreglo = dg.listAll().toArray();
-            for(int i = 0; i < arreglo.length; i++){
+        if (!dg.listAll().isEmpty()) {
+            Genero[] arreglo = dg.listAll().toArray();
+            for (Genero g : arreglo) {
                 HashMap<String, String> aux = new HashMap<>();
-                aux.put("value", arreglo[i].getIdGenero().toString()); 
-                aux.put("label", arreglo[i].getNombre());  
-                lista.add(aux);    
+                aux.put("value", g.getIdGenero().toString());
+                aux.put("label", g.getNombre());
+                lista.add(aux);
             }
         }
         return lista;
     }
 
-    public List<HashMap> listAll() throws Exception{
+    public List<HashMap> listAll() throws Exception {
         return Arrays.asList(dp.all().toArray());
     }
 
     public List<HashMap> search(String attribute, String text, Integer type) throws Exception {
         LinkedList<HashMap<String, Object>> lista = dp.search(attribute, text, type);
-        if(!lista.isEmpty())
-            return Arrays.asList(lista.toArray());
-        else
-            return new ArrayList<>();
+        return lista.isEmpty() ? new ArrayList<>() : Arrays.asList(lista.toArray());
     }
 
-
-    public List<HashMap> order(String attribute, Integer type)throws Exception{
-        return Arrays.asList(dp.orderByCancion(type, attribute).toArray());
+    public List<HashMap> order(String attribute, Integer type) throws Exception {
+        return Arrays.asList(dp.orderByPelicula(type, attribute).toArray());
     }
 
-    
+    public LinkedList<Pelicula> getPeliculas() {
+        return dp.listAll();
     }
-
-    
-
+}

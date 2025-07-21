@@ -2,14 +2,19 @@ package com.unl.proyectogrupal.base.models;
 
 import java.util.Date;
 
+import com.unl.proyectogrupal.base.controller.data_struct.list.LinkedList;
+
 public class Pelicula {
     private Integer id;
     private String titulo;
     private String sinopsis;
     private Integer duracion;
+    private String imagen;
     private String trailer;
     private Date fechaEstreno;
-    private Integer idGenero;
+    private LinkedList<Integer> idGenero;
+    private LinkedList<Integer> idActores;
+    private LinkedList<Integer> idDirector;
 
     
     public Integer getId() {
@@ -44,6 +49,14 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
+    public String getImagen() {
+        return this.imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     public String getTrailer() {
         return this.trailer;
     }
@@ -60,13 +73,31 @@ public class Pelicula {
         this.fechaEstreno = fechaEstreno;
     }
 
-    public Integer getIdGenero() {
-        return this.idGenero;
+    public LinkedList<Integer> getIdGenero() {
+        return idGenero;
     }
 
-    public void setIdGenero(Integer idGenero) {
+    public void setIdGenero(LinkedList<Integer> idGenero) {
         this.idGenero = idGenero;
     }
+
+    public LinkedList<Integer> getIdActores() {
+        return idActores;
+    }
+
+    public void setIdActores(LinkedList<Integer> idActores) {
+        this.idActores = idActores;
+    }
+
+    public LinkedList<Integer> getIdDirector() {
+        return idDirector;
+    }
+
+    public void setIdDirector(LinkedList<Integer> idDirector) {
+        this.idDirector = idDirector;
+    }
+
+
 
     public Object getIdPelicula() {
         // TODO Auto-generated method stub
